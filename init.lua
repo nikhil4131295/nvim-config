@@ -1,0 +1,12 @@
+require("vim._core.ui2").enable({})
+
+require("options")
+require("keymaps")
+require("commands")
+require("pack")
+require("neovide")
+require("treesitter")
+require("lsp")
+require("plugins.telescope")
+require("plugins.ui")
+require("plugins.coding")
