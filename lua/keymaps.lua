@@ -133,3 +133,21 @@ vim.keymap.set("n", "<S-A-Left>", "vb", { desc = "Select word left" })
 vim.keymap.set("n", "<S-A-Right>", "vw", { desc = "Select word right" })
 vim.keymap.set("v", "<S-A-Left>", "b", { desc = "Expand word selection left" })
 vim.keymap.set("v", "<S-A-Right>", "w", { desc = "Expand word selection right" })
+
+-- Smart Code Runner (Opens right split & automatically enters Insert Mode)
+vim.keymap.set("n", "<leader>r", function()
+  vim.cmd("w") -- Save current file first
+  local ft = vim.bo.filetype
+  local file = vim.fn.expand("%")
+  local file_no_ext = vim.fn.expand("%:r")
+
+  if ft == "cpp" then
+    vim.cmd("vsplit | terminal clang++ -std=c++17 " .. file .. " -o " .. file_no_ext .. " && ./" .. file_no_ext)
+    vim.cmd("startinsert") -- Auto-enter insert mode for console input
+  elseif ft == "java" then
+    vim.cmd("vsplit | terminal java " .. file)
+    vim.cmd("startinsert") -- Auto-enter insert mode for console input
+  else
+    vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
+  end
+end, { desc = "Run current code file & start insert mode" })
