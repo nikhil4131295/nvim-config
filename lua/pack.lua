@@ -21,26 +21,25 @@ vim.pack.add({
 ---- oil.nvim file explorer ----
 require("oil").setup({
   default_file_explorer = true,
-  columns = {
-    "icon",
+  columns = { "icon" },
+  float = {
+    padding = 2,
+    max_width = 45,
+    max_height = 0,
+    border = "rounded",
+    win_options = {
+      winblend = 0,
+    },
   },
   view_options = {
     show_hidden = true,
   },
 })
 
--- Toggle Oil as a left sidebar split
+-- Toggle Oil clean float panel
 vim.keymap.set("n", "<leader>e", function()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    if vim.bo[buf].filetype == "oil" then
-      vim.api.nvim_win_close(win, true)
-      return
-    end
-  end
-  vim.cmd("topleft vsplit | vertical resize 30 | Oil")
-end, { desc = "Toggle File Explorer Sidebar" })
-
+  require("oil").open_float()
+end, { desc = "Toggle File Explorer" })
 -----------------------------------------------
 
 
