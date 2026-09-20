@@ -1,6 +1,5 @@
 vim.pack.add({
     "https://github.com/bluz71/vim-moonfly-colors",
-    "https://github.com/nvim-mini/mini.nvim",
     "https://github.com/rafamadriz/friendly-snippets",
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
     "https://github.com/neovim/nvim-lspconfig",
@@ -13,29 +12,38 @@ vim.pack.add({
     "https://github.com/nvim-tree/nvim-web-devicons",
     "https://github.com/catppuccin/nvim",
     "https://github.com/stevearc/oil.nvim",
+    "https://github.com/echasnovski/mini.nvim", 
     "https://github.com/windwp/nvim-autopairs",
     "https://github.com/numToStr/Comment.nvim",
     "https://github.com/akinsho/bufferline.nvim",
 })
 
--- mini files ----
-local MiniFiles = require("mini.files")
-MiniFiles.setup({
-    mappings = {
-        go_in = "<CR>",
-        go_in_plus = "L",
-        go_out = "_",
-        go_out_plus = "H",
-    },
+---- oil.nvim file explorer ----
+require("oil").setup({
+  default_file_explorer = true,
+  columns = {
+    "icon",
+  },
+  view_options = {
+    show_hidden = true,
+  },
 })
 
-vim.keymap.set("n", "-", "<cmd>lua MiniFiles.open()<CR>", { desc = "Toggle mini file explorer" })
-vim.keymap.set("n", "<leader>-", function()
-    MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
-    MiniFiles.reveal_cwd()
-end, { desc = "Toggle into currently opened file" })
+-- Toggle Oil as a left sidebar split
+vim.keymap.set("n", "<leader>e", function()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].filetype == "oil" then
+      vim.api.nvim_win_close(win, true)
+      return
+    end
+  end
+  vim.cmd("topleft vsplit | vertical resize 30 | Oil")
+end, { desc = "Toggle File Explorer Sidebar" })
 
----- mini notify ----
+-----------------------------------------------
+
+
 require("mini.notify").setup({
 	-- only show messages
     content = {
