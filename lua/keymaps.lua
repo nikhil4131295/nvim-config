@@ -78,3 +78,24 @@ vim.keymap.set("n", "<leader>th", function()
   vim.cmd.colorscheme(theme)
   vim.notify("Theme: " .. theme, vim.log.levels.INFO, { title = "Colorscheme Switched" })
 end, { desc = "Cycle through favorite themes instantly" })
+
+-- Move single lines up/down with Alt/Option + j/k or Up/Down
+vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
+vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
+vim.keymap.set("n", "<A-Down>", "<cmd>m .+1<CR>==", { desc = "Move line down" })
+vim.keymap.set("n", "<A-Up>", "<cmd>m .-2<CR>==", { desc = "Move line up" })
+
+-- Move highlighted blocks of code up/down in Visual Mode
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+vim.keymap.set("v", "<A-Down>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<A-Up>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+
+
+-- Word movement in Insert Mode
+vim.keymap.set("i", "<A-Left>", "<C-o>b", { desc = "Move back one word" })
+vim.keymap.set("i", "<A-Right>", "<C-o>w", { desc = "Move forward one word" })
+
+-- Jump to start/end of line in Normal & Insert modes
+vim.keymap.set({ "n", "i" }, "<D-Left>", "<Home>", { desc = "Jump to start of line" })
+vim.keymap.set({ "n", "i" }, "<D-Right>", "<End>", { desc = "Jump to end of line" })
