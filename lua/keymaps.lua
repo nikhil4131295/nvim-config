@@ -206,3 +206,14 @@ vim.api.nvim_create_autocmd({ "FileType", "LspAttach" }, {
     vim.keymap.set("n", "<leader>f", smart_format, { buffer = args.buf, desc = "Smart Code Formatter" })
   end,
 })
+
+-------------------------------------------------------------------------------
+-- Option + Shift + Up/Down Fast Line Scrolling (Jumps 5 lines at a time)
+-------------------------------------------------------------------------------
+-- Normal & Visual mode scrolling
+vim.keymap.set({"n", "v"}, "<M-S-Up>", "5k", { desc = "Scroll cursor up 5 lines" })
+vim.keymap.set({"n", "v"}, "<M-S-Down>", "5j", { desc = "Scroll cursor down 5 lines" })
+
+-- Insert mode scrolling (allows fast jumping without exiting insert mode)
+vim.keymap.set("i", "<M-S-Up>", "<C-o>5k", { desc = "Scroll cursor up 5 lines in insert mode" })
+vim.keymap.set("i", "<M-S-Down>", "<C-o>5j", { desc = "Scroll cursor down 5 lines in insert mode" })
