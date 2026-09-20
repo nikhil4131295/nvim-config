@@ -60,3 +60,21 @@ end, { desc = "Compile and Run C++ in Right Terminal Split" })
 
 -- Clear search highlights with <Esc>
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true, desc = "Clear search highlights" })
+
+-- Fast theme switcher: Press <leader>th to instantly swap to the next theme
+local favorite_themes = {
+  "catppuccin-mocha",
+  "moonfly",
+  "gruvbox",
+  "tokyonight-night",
+  "tokyonight-storm",
+  "monokai",
+}
+local current_theme_index = 1
+
+vim.keymap.set("n", "<leader>th", function()
+  current_theme_index = (current_theme_index % #favorite_themes) + 1
+  local theme = favorite_themes[current_theme_index]
+  vim.cmd.colorscheme(theme)
+  vim.notify("Theme: " .. theme, vim.log.levels.INFO, { title = "Colorscheme Switched" })
+end, { desc = "Cycle through favorite themes instantly" })
