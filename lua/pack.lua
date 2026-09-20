@@ -11,35 +11,33 @@ vim.pack.add({
     "https://github.com/nvim-lualine/lualine.nvim",
     "https://github.com/nvim-tree/nvim-web-devicons",
     "https://github.com/catppuccin/nvim",
-    "https://github.com/stevearc/oil.nvim",
+    --"https://github.com/stevearc/oil.nvim",
+    "https://github.com/nvim-tree/nvim-tree.lua",
     "https://github.com/echasnovski/mini.nvim", 
     "https://github.com/windwp/nvim-autopairs",
     "https://github.com/numToStr/Comment.nvim",
     "https://github.com/akinsho/bufferline.nvim",
 })
 
----- oil.nvim file explorer ----
-require("oil").setup({
-  default_file_explorer = true,
-  columns = { "icon" },
-  float = {
-    padding = 2,
-    max_width = 45,
-    max_height = 0,
-    border = "rounded",
-    win_options = {
-      winblend = 0,
-    },
+---- nvim-tree file explorer sidebar ----
+require("nvim-tree").setup({
+  sort = {
+    sorter = "case_sensitive",
   },
-  view_options = {
-    show_hidden = true,
+  view = {
+    width = 30,
+    side = "left",
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = false,
   },
 })
 
--- Toggle Oil clean float panel
-vim.keymap.set("n", "<leader>e", function()
-  require("oil").open_float()
-end, { desc = "Toggle File Explorer" })
+-- Toggle Sidebar with <leader>e
+vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle NvimTree Sidebar" })
 -----------------------------------------------
 
 
