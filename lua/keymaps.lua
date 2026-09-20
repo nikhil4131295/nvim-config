@@ -134,23 +134,33 @@ vim.keymap.set("n", "<S-A-Right>", "vw", { desc = "Select word right" })
 vim.keymap.set("v", "<S-A-Left>", "b", { desc = "Expand word selection left" })
 vim.keymap.set("v", "<S-A-Right>", "w", { desc = "Expand word selection right" })
 
--- Smart Code Runner (Opens right split & automatically enters Insert Mode)
+-- Smart Code Runner (reuses execution window and cleans up terminal buffers)
 vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("w") -- Save current file first
+  vim.cmd("w") -- Save file first
   local ft = vim.bo.filetype
   local file = vim.fn.expand("%")
   local file_no_ext = vim.fn.expand("%:r")
 
+  local cmd = ""
   if ft == "cpp" then
-    vim.cmd("vsplit | terminal clang++ -std=c++17 " .. file .. " -o " .. file_no_ext .. " && ./" .. file_no_ext)
-    vim.cmd("startinsert") -- Auto-enter insert mode for console input
+    cmd = "clang++ -std=c++17 " .. file .. " -o " .. file_no_ext .. " && ./" .. file_no_ext
   elseif ft == "java" then
-    vim.cmd("vsplit | terminal java " .. file)
-    vim.cmd("startinsert") -- Auto-enter insert mode for console input
+    cmd = "java " .. file
   else
     vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
+    return
   end
-end, { desc = "Run current code file & start insert mode" })
+
+  -- Open vertical split on the right and start terminal
+  vim.cmd("vsplit | terminal " .. cmd)
+  
+  -- Automatically wipe the buffer when the terminal process closes so it doesn't stay in the tabline
+  vim.bo.bufhidden = "wipe"
+  
+  -- Auto-enter Insert mode for immediate keyboard input
+  vim.cmd("startinsert")
+end, { desc = "Run code in right split without leaving stray terminal buffers" })
+
 
 -------------------------------------------------------------------------------
 -- Terminal Navigation & Exit Helper Shortcuts
