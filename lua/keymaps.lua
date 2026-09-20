@@ -57,3 +57,6 @@ vim.keymap.set("n", "<leader>r", function()
   -- Enter insert mode automatically so you can type cin inputs right away
   vim.cmd("startinsert")
 end, { desc = "Compile and Run C++ in Right Terminal Split" })
+
+-- Clear search highlights with <Esc>
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true, desc = "Clear search highlights" })
