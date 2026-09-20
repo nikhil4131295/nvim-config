@@ -99,3 +99,37 @@ vim.keymap.set("i", "<A-Right>", "<C-o>w", { desc = "Move forward one word" })
 -- Jump to start/end of line in Normal & Insert modes
 vim.keymap.set({ "n", "i" }, "<D-Left>", "<Home>", { desc = "Jump to start of line" })
 vim.keymap.set({ "n", "i" }, "<D-Right>", "<End>", { desc = "Jump to end of line" })
+
+-------------------------------------------------------------------------------
+-- 1. Word Hopping with Option + Left / Right (behaves like 'b' and 'w')
+-------------------------------------------------------------------------------
+-- Normal mode word jumping
+vim.keymap.set("n", "<A-Left>", "b", { desc = "Jump word backward" })
+vim.keymap.set("n", "<A-Right>", "w", { desc = "Jump word forward" })
+
+-- Insert mode word jumping
+vim.keymap.set("i", "<A-Left>", "<C-o>b", { desc = "Jump word backward" })
+vim.keymap.set("i", "<A-Right>", "<C-o>w", { desc = "Jump word forward" })
+
+-------------------------------------------------------------------------------
+-- 2. Shift + Arrows Selection (VS Code Style)
+-------------------------------------------------------------------------------
+-- Shift + Left/Right character selection in Normal Mode
+vim.keymap.set("n", "<S-Left>", "vC-h>", { desc = "Select left" })
+vim.keymap.set("n", "<S-Right>", "v", { desc = "Select right" })
+
+-- Shift + Up/Down line selection in Normal Mode
+vim.keymap.set("n", "<S-Up>", "Vk", { desc = "Select line up" })
+vim.keymap.set("n", "<S-Down>", "Vj", { desc = "Select line down" })
+
+-- Continue expanding selection while in Visual Mode
+vim.keymap.set("v", "<S-Left>", "h", { desc = "Expand selection left" })
+vim.keymap.set("v", "<S-Right>", "l", { desc = "Expand selection right" })
+vim.keymap.set("v", "<S-Up>", "k", { desc = "Expand selection up" })
+vim.keymap.set("v", "<S-Down>", "j", { desc = "Expand selection down" })
+
+-- Shift + Option + Left/Right (Word-by-word selection)
+vim.keymap.set("n", "<S-A-Left>", "vb", { desc = "Select word left" })
+vim.keymap.set("n", "<S-A-Right>", "vw", { desc = "Select word right" })
+vim.keymap.set("v", "<S-A-Left>", "b", { desc = "Expand word selection left" })
+vim.keymap.set("v", "<S-A-Right>", "w", { desc = "Expand word selection right" })
