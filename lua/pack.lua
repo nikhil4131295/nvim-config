@@ -10,6 +10,7 @@ vim.pack.add({
     "https://github.com/nvim-telescope/telescope.nvim",
     "https://github.com/nvim-lualine/lualine.nvim",
     "https://github.com/nvim-tree/nvim-web-devicons",
+    "https://github.com/goolord/alpha-nvim",
     "https://github.com/catppuccin/nvim",
     "https://github.com/ellisonleao/gruvbox.nvim",
     "https://github.com/folke/tokyonight.nvim", -- TokyoNight
@@ -122,6 +123,36 @@ if status then
       enable = true, -- Enables rich AST-based colors
     },
   })
+end
+
+-------------------------------------------------------------------------------
+-- Alpha Startup Dashboard Configuration
+-------------------------------------------------------------------------------
+local status, alpha = pcall(require, "alpha")
+if status then
+  local dashboard = require("alpha.themes.dashboard")
+  
+  -- Custom ASCII Art Header
+  dashboard.section.header.val = {
+    "                                                     ",
+    "  ███╗   ██╗███████╗██╗   ██╗██╗███╗   ███╗          ",
+    "  ████╗  ██║██╔════╝██║   ██║██║████╗ ████║          ",
+    "  ██╔██╗ ██║█████╗  ██║   ██║██║██╔████╔██║          ",
+    "  ██║╚██╗██║██╔══╝  ╚██╗ ██╔╝██║██║╚██╔╝██║          ",
+    "  ██║ ╚████║███████╗ ╚████╔╝ ██║██║ ╚═╝ ██║          ",
+    "  ╚═╝  ╚═══╝╚══════╝  ╚═══╝  ╚═╝╚═╝     ╚═╝          ",
+    "                                                     ",
+  }
+
+  -- Quick Action Buttons
+  dashboard.section.buttons.val = {
+    dashboard.button("f", "🔍  Find file", "<cmd>MiniPickBuiltin files<CR>"),
+    dashboard.button("e", "📂  New file", "<cmd>ene <BAR> startinsert <CR>"),
+    dashboard.button("r", "🕒  Recent files", "<cmd>MiniPickBuiltin oldfiles<CR>"),
+    dashboard.button("q", "❌  Quit Neovim", "<cmd>qa<CR>"),
+  }
+
+  alpha.setup(dashboard.opts)
 end
 
 require("treesitter")
