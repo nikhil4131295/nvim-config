@@ -151,3 +151,13 @@ vim.keymap.set("n", "<leader>r", function()
     vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
   end
 end, { desc = "Run current code file & start insert mode" })
+
+-------------------------------------------------------------------------------
+-- Terminal Navigation & Exit Helper Shortcuts
+-------------------------------------------------------------------------------
+-- Press <Esc><Esc> inside terminal to exit Terminal Insert mode immediately
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+-- Easy window navigation directly from terminal mode
+vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Move to left window from terminal" })
+vim.keymap.set("t", "<C-q>", "<C-\\><C-n><cmd>close<CR>", { desc = "Close terminal split" })
