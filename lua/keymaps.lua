@@ -171,3 +171,38 @@ vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" }
 -- Easy window navigation directly from terminal mode
 vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Move to left window from terminal" })
 vim.keymap.set("t", "<C-q>", "<C-\\><C-n><cmd>close<CR>", { desc = "Close terminal split" })
+
+-------------------------------------------------------------------------------
+-- Universal Smart Formatting Override (<Space>f)
+-------------------------------------------------------------------------------
+local function smart_format()
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  local has_lsp_formatter = false
+
+  for _, client in ipairs(clients) do
+    -- Use colon syntax client:supports_method to prevent deprecation warnings
+    if client:supports_method("textDocument/formatting") then
+      has_lsp_formatter = true
+      break
+    end
+  end
+
+  if has_lsp_formatter then
+    vim.lsp.buf.format({ async = true })
+  else
+    local view = vim.fn.winsaveview()
+    vim.cmd("normal! gg=G")
+    vim.fn.winrestview(view)
+    vim.notify("Formatted using native indent rules", vim.log.levels.INFO)
+  end
+end
+
+-- Set globally
+vim.keymap.set("n", "<leader>f", smart_format, { desc = "Smart Code Formatter" })
+
+-- Force override buffer-local mappings set by mini.extra or LSP plugins
+vim.api.nvim_create_autocmd({ "FileType", "LspAttach" }, {
+  callback = function(args)
+    vim.keymap.set("n", "<leader>f", smart_format, { buffer = args.buf, desc = "Smart Code Formatter" })
+  end,
+})
