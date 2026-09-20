@@ -110,6 +110,20 @@ MiniDiff.setup({
 vim.keymap.set("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Git diff split", })
 
+-------------------------------------------------------------------------------
+-- Treesitter Configuration (Rich Syntax Highlighting)
+-------------------------------------------------------------------------------
+-- Treesitter Configuration (Safe Load)
+local status, treesitter = pcall(require, "nvim-treesitter.configs")
+if status then
+  treesitter.setup({
+    ensure_installed = { "java", "cpp", "c", "lua", "vim", "vimdoc" },
+    highlight = {
+      enable = true, -- Enables rich AST-based colors
+    },
+  })
+end
+
 require("treesitter")
 
 require("lsp")
