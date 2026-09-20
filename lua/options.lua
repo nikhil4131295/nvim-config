@@ -13,7 +13,6 @@ opt.shiftwidth = 4
 opt.expandtab = true
 opt.autoindent = true
 
-opt.wrap = false
 opt.smartindent = true
 opt.inccommand = "split"
 
@@ -56,4 +55,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 
+-- Enable line wrapping so long code lines wrap instead of shifting the screen
+vim.opt.wrap = true
+vim.opt.sidescroll = 0
+vim.opt.sidescrolloff = 0
 
+-- Disable trackpad horizontal scroll keys (ScrollWheelRight / ScrollWheelLeft)
+vim.keymap.set({ "n", "v", "i" }, "<ScrollWheelRight>", "<Nop>", { silent = true })
+vim.keymap.set({ "n", "v", "i" }, "<ScrollWheelLeft>", "<Nop>", { silent = true })
