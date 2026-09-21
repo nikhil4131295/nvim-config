@@ -217,3 +217,22 @@ vim.keymap.set({"n", "v"}, "<M-S-Down>", "5j", { desc = "Scroll cursor down 5 li
 -- Insert mode scrolling (allows fast jumping without exiting insert mode)
 vim.keymap.set("i", "<M-S-Up>", "<C-o>5k", { desc = "Scroll cursor up 5 lines in insert mode" })
 vim.keymap.set("i", "<M-S-Down>", "<C-o>5j", { desc = "Scroll cursor down 5 lines in insert mode" })
+
+
+-------------------------------------------------------------------------------
+-- Native Code Commenting (<Cmd+/> and <Ctrl+/>)
+-------------------------------------------------------------------------------
+-- Normal mode (Uses native 'gcc' operator)
+vim.keymap.set("n", "<D-/>", "gcc", { remap = true, desc = "Toggle comment line" })
+vim.keymap.set("n", "<C-/>", "gcc", { remap = true, desc = "Toggle comment line" })
+vim.keymap.set("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment line" })
+
+-- Insert mode (Escapes briefly to run gcc, then returns to insert mode)
+vim.keymap.set("i", "<D-/>", "<Esc>gccgi", { remap = true, desc = "Toggle comment line" })
+vim.keymap.set("i", "<C-/>", "<Esc>gccgi", { remap = true, desc = "Toggle comment line" })
+vim.keymap.set("i", "<C-_>", "<Esc>gccgi", { remap = true, desc = "Toggle comment line" })
+
+-- Visual mode (Uses native 'gc' operator)
+vim.keymap.set("v", "<D-/>", "gc", { remap = true, desc = "Toggle comment selection" })
+vim.keymap.set("v", "<C-/>", "gc", { remap = true, desc = "Toggle comment selection" })
+vim.keymap.set("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment selection" })

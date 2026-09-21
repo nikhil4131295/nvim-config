@@ -19,7 +19,7 @@ vim.pack.add({
     "https://github.com/nvim-tree/nvim-tree.lua",
     "https://github.com/echasnovski/mini.nvim",
     "https://github.com/windwp/nvim-autopairs",
-    "https://github.com/numToStr/Comment.nvim",
+   -- "https://github.com/numToStr/Comment.nvim",
     "https://github.com/akinsho/bufferline.nvim",
 })
 
@@ -158,3 +158,6 @@ end
 require("treesitter")
 
 require("lsp")
+
+
+

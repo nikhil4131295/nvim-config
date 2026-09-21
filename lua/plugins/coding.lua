@@ -1,5 +1,8 @@
 -- Enable Auto-pairs
 require("nvim-autopairs").setup({})
 
--- Enable Comment.nvim (Keymaps: `gcc` for line comment, `gc` for selection)
-require("Comment").setup()
+-- Safely load Comment if present, otherwise ignore
+local status, comment = pcall(require, "Comment")
+if status then
+  comment.setup()
+end
