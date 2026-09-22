@@ -9,7 +9,7 @@ vim.cmd.colorscheme("catppuccin")
 -- 2. Setup Lualine using Catppuccin's explicit theme name
 require("lualine").setup({
   options = {
-    theme = "catppuccin-mocha", -- Explicit lualine theme provided by catppuccin
+    theme = 'auto', 
     component_separators = { left = "|", right = "|" },
     section_separators = { left = "", right = "" },
     globalstatus = true,
