@@ -240,3 +240,39 @@ vim.keymap.set("i", "<C-_>", "<Esc>gccgi", { remap = true, desc = "Toggle commen
 vim.keymap.set("v", "<D-/>", "gc", { remap = true, desc = "Toggle comment selection" })
 vim.keymap.set("v", "<C-/>", "gc", { remap = true, desc = "Toggle comment selection" })
 vim.keymap.set("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment selection" })
+
+
+-------------------------------------------------------------------------------
+-- Select All (Cmd + A) across Normal, Visual, and Insert Modes
+-------------------------------------------------------------------------------
+vim.keymap.set("n", "<D-a>", "ggVG", { desc = "Select all text" })
+vim.keymap.set("v", "<D-a>", "<Esc>ggVG", { desc = "Select all text" })
+vim.keymap.set("i", "<D-a>", "<Esc>ggVG", { desc = "Select all text" })
+
+
+-------------------------------------------------------------------------------
+-- macOS Clipboard Operations (Cmd + C / Cmd + V)
+-------------------------------------------------------------------------------
+-- Copy selected text in Visual mode
+vim.keymap.set("v", "<D-c>", '"+y', { desc = "Copy to system clipboard" })
+
+-- Paste system clipboard in Normal and Visual mode
+vim.keymap.set({"n", "v"}, "<D-v>", '"+p', { desc = "Paste from system clipboard" })
+
+-- Paste system clipboard in Insert mode
+vim.keymap.set("i", "<D-v>", "<C-r>+", { desc = "Paste from system clipboard in insert mode" })
+
+-- Paste from system clipboard in Command-line mode
+vim.keymap.set("c", "<D-v>", "<C-r>+", { desc = "Paste from system clipboard in command mode" })
+
+
+-------------------------------------------------------------------------------
+-- Undo & Redo (Cmd + Z / Cmd + Shift + Z) across Normal, Visual, and Insert Modes
+-------------------------------------------------------------------------------
+-- Normal & Visual Mode
+vim.keymap.set({"n", "v"}, "<D-z>", "u", { desc = "Undo change" })
+vim.keymap.set({"n", "v"}, "<D-Z>", "<C-r>", { desc = "Redo change" })
+
+-- Insert Mode (temporarily escapes to execute undo/redo without dropping out of insert mode)
+vim.keymap.set("i", "<D-z>", "<C-o>u", { desc = "Undo change in insert mode" })
+vim.keymap.set("i", "<D-Z>", "<C-o><C-r>", { desc = "Redo change in insert mode" })
