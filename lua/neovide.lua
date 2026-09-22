@@ -30,9 +30,12 @@ end, { desc = "Reset Zoom" })
 -- Neovide GUI Settings
 -------------------------------------------------------------------------------
 if vim.g.neovide then
+  -- Use exact font family name from system with escaped spaces
+  vim.o.guifont = "JetBrains\\ Mono:h18"
+
   -- Disable IME composition lag
   vim.g.neovide_input_ime = false
 
-  -- Enable macOS Command key shortcuts (<D-a>, <D-c>, <D-v>) natively
+  -- Enable macOS Command key shortcuts
   vim.g.neovide_input_use_logo = true
 end
