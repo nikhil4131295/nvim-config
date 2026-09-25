@@ -143,7 +143,7 @@ vim.keymap.set("n", "<leader>r", function()
 
   local cmd = ""
   if ft == "cpp" then
-    cmd = "clang++ -std=c++17 " .. file .. " -o " .. file_no_ext .. " && ./" .. file_no_ext
+      cmd = "clang++ -std=c++17 " .. file .. " -o " .. file_no_ext .. " && ./" .. file_no_ext
   elseif ft == "java" then
     cmd = "java " .. file
   else
