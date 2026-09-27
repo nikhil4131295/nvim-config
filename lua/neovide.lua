@@ -31,7 +31,7 @@ end, { desc = "Reset Zoom" })
 -------------------------------------------------------------------------------
 if vim.g.neovide then
   -- Back to JetBrains Mono with Nerd Font support
-  vim.o.guifont = "JetBrainsMonoNL Nerd Font:h18"
+  vim.o.guifont = "JetBrainsMono Nerd Font:h18"
 
   -- Remove vertical gaps between block characters
   vim.g.neovide_linespace = 0
@@ -40,3 +40,33 @@ if vim.g.neovide then
   vim.g.neovide_input_ime = false
   vim.g.neovide_input_use_logo = true
 end
+
+-- Font-Cycle setup
+
+
+if vim.g.neovide then
+    -- Back to JetBrains Mono with Nerd Font support
+    vim.o.guifont = "JetBrainsMono Nerd Font:h18"
+    -- Remove vertical gaps between block characters
+    vim.g.neovide_linespace = 0
+    -- macOS shortcuts & input settings
+    vim.g.neovide_input_ime = false
+    vim.g.neovide_input_use_logo = true
+end
+
+local fonts = {
+  "JetBrainsMono Nerd Font:h18",
+  "FiraCode Nerd Font:h18",
+  "Menlo:h18",
+}
+
+local current_font_index = 1
+
+local function cycle_font()
+  current_font_index = (current_font_index % #fonts) + 1
+  local new_font = fonts[current_font_index]
+  vim.o.guifont = new_font
+  vim.notify("Font set to: " .. new_font, vim.log.levels.INFO)
+end
+
+vim.keymap.set("n", "<space>fc", cycle_font, { desc = "Cycle Neovide fonts" })
