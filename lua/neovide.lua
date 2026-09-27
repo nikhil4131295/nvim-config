@@ -58,6 +58,7 @@ local fonts = {
   "JetBrainsMono Nerd Font:h18",
   "FiraCode Nerd Font:h18",
   "Menlo:h18",
+  "Hack Nerd Font:h18"
 }
 
 local current_font_index = 1
