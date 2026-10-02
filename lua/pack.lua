@@ -25,21 +25,26 @@ vim.pack.add({
 
 ---- nvim-tree file explorer sidebar ----
 require("nvim-tree").setup({
-    sort = {
-        sorter = "case_sensitive",
-    },
-    view = {
-        width = 30,
-        side = "left",
-    },
-    renderer = {
-        group_empty = true,
-    },
-    filters = {
-        dotfiles = false,
-    },
+  sync_root_with_cwd = true,
+  respect_buf_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_root = true,
+  },
+  sort = {
+    sorter = "case_sensitive",
+  },
+  view = {
+    width = 30,
+    side = "left",
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = false,
+  },
 })
-
 -- Toggle Sidebar with <leader>e
 vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle NvimTree Sidebar" })
 -----------------------------------------------

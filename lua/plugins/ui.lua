@@ -38,7 +38,17 @@ vim.keymap.set("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Previous 
 vim.keymap.set("n", "<S-l>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next tab/buffer" })
 
 -- Keymap to close the current tab buffer using <leader>x
-vim.keymap.set("n", "<leader>x", "<cmd>bdelete<CR>", { desc = "Close current tab/buffer" })
+vim.keymap.set("n", "<leader>x", function()
+  local listed_bufs = vim.fn.getbufinfo({ buflisted = 1 })
+  if #listed_bufs > 1 then
+    local cur_buf = vim.api.nvim_get_current_buf()
+    vim.cmd("bprevious")
+    vim.cmd("bdelete " .. cur_buf)
+  else
+    vim.cmd("confirm quit")
+  end
+end, { desc = "Close current buffer or quit if last" })
+
 
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
