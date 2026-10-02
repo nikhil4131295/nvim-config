@@ -4,7 +4,7 @@ require("catppuccin").setup({
   transparent_background = false,
   term_colors = true,
 })
-vim.cmd.colorscheme("moonfly")
+vim.cmd.colorscheme("tokyonight-storm")
 
 -- 2. Setup Lualine using Catppuccin's explicit theme name
 require("lualine").setup({
