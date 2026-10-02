@@ -33,30 +33,43 @@ vim.keymap.set("n", "<leader>u", function()
     require("undotree").open()
 end, { desc = "Toggle Builtin Undotree" })
 
--- Compile and Run C++ code on <F5>
+-- Multi-Language Smart Code Runner (C++ via /tmp & Java)
 vim.keymap.set("n", "<leader>r", function()
-  -- Save the current file first
-  vim.cmd("w")
+  vim.cmd("w") -- Save file first
 
+  local ft = vim.bo.filetype
   local file = vim.fn.expand("%")
-  local output = vim.fn.expand("%:r")
+  local name = vim.fn.expand("%:t:r") -- Filename only (e.g., Program-01)
+  local tmp_bin = "/tmp/" .. name
 
-  -- Check if a terminal buffer already exists and wipe it to clean previous outputs
+  -- Clear any existing terminal buffers on the right
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.bo[buf].buftype == "terminal" then
       vim.api.nvim_buf_delete(buf, { force = true })
     end
   end
 
-  -- Open a vertical split on the far right and start the compile & run command
-  vim.cmd("botright vsplit | terminal g++ -std=c++17 " .. vim.fn.shellescape(file) .. " -o " .. vim.fn.shellescape(output) .. " && ./" .. vim.fn.shellescape(output))
-  
-  -- Optionally adjust terminal width (e.g., 50 columns wide)
+  local cmd = ""
+  if ft == "cpp" then
+    -- Output directly to /tmp, run, and clean up automatically
+    cmd = string.format("g++ -std=c++17 %s -o %s && %s && rm %s",
+      vim.fn.shellescape(file),
+      vim.fn.shellescape(tmp_bin),
+      vim.fn.shellescape(tmp_bin),
+      vim.fn.shellescape(tmp_bin)
+    )
+  elseif ft == "java" then
+    cmd = "java " .. vim.fn.shellescape(file)
+  else
+    vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
+    return
+  end
+
+  -- Open split, run process, and focus terminal for user input
+  vim.cmd("botright vsplit | terminal " .. cmd)
   vim.cmd("vertical resize 50")
-  
-  -- Enter insert mode automatically so you can type cin inputs right away
   vim.cmd("startinsert")
-end, { desc = "Compile and Run C++ in Right Terminal Split" })
+end, { desc = "Compile & Run C++ (/tmp) or Java" })
 
 -- Clear search highlights with <Esc>
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true, desc = "Clear search highlights" })
@@ -133,33 +146,6 @@ vim.keymap.set("n", "<S-A-Left>", "vb", { desc = "Select word left" })
 vim.keymap.set("n", "<S-A-Right>", "vw", { desc = "Select word right" })
 vim.keymap.set("v", "<S-A-Left>", "b", { desc = "Expand word selection left" })
 vim.keymap.set("v", "<S-A-Right>", "w", { desc = "Expand word selection right" })
-
--- Smart Code Runner (reuses execution window and cleans up terminal buffers)
-vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("w") -- Save file first
-  local ft = vim.bo.filetype
-  local file = vim.fn.expand("%")
-  local file_no_ext = vim.fn.expand("%:r")
-
-  local cmd = ""
-  if ft == "cpp" then
-      cmd = "clang++ -std=c++17 " .. file .. " -o " .. file_no_ext .. " && ./" .. file_no_ext
-  elseif ft == "java" then
-    cmd = "java " .. file
-  else
-    vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
-    return
-  end
-
-  -- Open vertical split on the right and start terminal
-  vim.cmd("vsplit | terminal " .. cmd)
-  
-  -- Automatically wipe the buffer when the terminal process closes so it doesn't stay in the tabline
-  vim.bo.bufhidden = "wipe"
-  
-  -- Auto-enter Insert mode for immediate keyboard input
-  vim.cmd("startinsert")
-end, { desc = "Run code in right split without leaving stray terminal buffers" })
 
 
 -------------------------------------------------------------------------------
