@@ -45,7 +45,7 @@ vim.opt.completeopt = "menuone,noselect,fuzzy,nosort"
 vim.opt.clipboard = vim.opt.clipboard + "unnamedplus"
 opt.isfname:append("@-@")
 opt.guicursor = ""
-opt.cmdheight = 1
+opt.cmdheight = 0
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking (copying) text",

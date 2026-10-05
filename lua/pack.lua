@@ -130,36 +130,6 @@ if status then
   })
 end
 
--------------------------------------------------------------------------------
--- Alpha Startup Dashboard Configuration
--------------------------------------------------------------------------------
-local status, alpha = pcall(require, "alpha")
-if status then
-  local dashboard = require("alpha.themes.dashboard")
-  
-  -- Custom ASCII Art Header
-  dashboard.section.header.val = {
-    "                                                     ",
-    "  ███╗   ██╗███████╗██╗   ██╗██╗███╗   ███╗          ",
-    "  ████╗  ██║██╔════╝██║   ██║██║████╗ ████║          ",
-    "  ██╔██╗ ██║█████╗  ██║   ██║██║██╔████╔██║          ",
-    "  ██║╚██╗██║██╔══╝  ╚██╗ ██╔╝██║██║╚██╔╝██║          ",
-    "  ██║ ╚████║███████╗ ╚████╔╝ ██║██║ ╚═╝ ██║          ",
-    "  ╚═╝  ╚═══╝╚══════╝  ╚═══╝  ╚═╝╚═╝     ╚═╝          ",
-    "                                                     ",
-  }
-
-  -- Quick Action Buttons
-  dashboard.section.buttons.val = {
-    dashboard.button("f", "🔍  Find file", "<cmd>MiniPickBuiltin files<CR>"),
-    dashboard.button("e", "📂  New file", "<cmd>ene <BAR> startinsert <CR>"),
-    dashboard.button("r", "🕒  Recent files", "<cmd>MiniPickBuiltin oldfiles<CR>"),
-    dashboard.button("q", "❌  Quit Neovim", "<cmd>qa<CR>"),
-  }
-
-  alpha.setup(dashboard.opts)
-end
-
 require("treesitter")
 
 require("lsp")
