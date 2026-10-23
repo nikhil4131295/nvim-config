@@ -5,7 +5,7 @@ vim.pack.add({
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/mason-org/mason.nvim",
     "https://github.com/tpope/vim-fugitive",
-    "https://github.com/jiaoshijie/undotree",
+   -- "https://github.com/jiaoshijie/undotree",
     "https://github.com/nvim-lua/plenary.nvim",
     "https://github.com/nvim-telescope/telescope.nvim",
     "https://github.com/nvim-lualine/lualine.nvim",
@@ -115,20 +115,6 @@ MiniDiff.setup({
 
 vim.keymap.set("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Git diff split", })
-
--------------------------------------------------------------------------------
--- Treesitter Configuration (Rich Syntax Highlighting)
--------------------------------------------------------------------------------
--- Treesitter Configuration (Safe Load)
-local status, treesitter = pcall(require, "nvim-treesitter.configs")
-if status then
-  treesitter.setup({
-    ensure_installed = { "java", "cpp", "c", "lua", "vim", "vimdoc" },
-    highlight = {
-      enable = true, -- Enables rich AST-based colors
-    },
-  })
-end
 
 require("treesitter")
 

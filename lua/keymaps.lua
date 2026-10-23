@@ -34,24 +34,26 @@ vim.keymap.set("n", "<leader>u", function()
 end, { desc = "Toggle Builtin Undotree" })
 
 -- Multi-Language Smart Code Runner (C++ via /tmp & Java)
+local runner_term_buf = nil
+
 vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("w") -- Save file first
+  -- Save file first if it's modified and has a valid filename
+  if vim.bo.modified and vim.api.nvim_buf_get_name(0) ~= "" then
+    vim.cmd("w")
+  end
 
   local ft = vim.bo.filetype
   local file = vim.fn.expand("%")
-  local name = vim.fn.expand("%:t:r") -- Filename only (e.g., Program-01)
+  local name = vim.fn.expand("%:t:r") -- Filename only
   local tmp_bin = "/tmp/" .. name
 
-  -- Clear any existing terminal buffers on the right
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.bo[buf].buftype == "terminal" then
-      vim.api.nvim_buf_delete(buf, { force = true })
-    end
+  -- Only close the previous code runner terminal split (not all terminals)
+  if runner_term_buf and vim.api.nvim_buf_is_valid(runner_term_buf) then
+    vim.api.nvim_buf_delete(runner_term_buf, { force = true })
   end
 
   local cmd = ""
   if ft == "cpp" then
-    -- Output directly to /tmp, run, and clean up automatically
     cmd = string.format("g++ -std=c++17 %s -o %s && %s && rm %s",
       vim.fn.shellescape(file),
       vim.fn.shellescape(tmp_bin),
@@ -65,10 +67,11 @@ vim.keymap.set("n", "<leader>r", function()
     return
   end
 
-  -- Open split, run process, and focus terminal for user input
+  -- Open split, run process, focus terminal, and store buffer handle
   vim.cmd("botright vsplit | terminal " .. cmd)
   vim.cmd("vertical resize 50")
   vim.cmd("startinsert")
+  runner_term_buf = vim.api.nvim_get_current_buf()
 end, { desc = "Compile & Run C++ (/tmp) or Java" })
 
 -- Clear search highlights with <Esc>
@@ -128,7 +131,7 @@ vim.keymap.set("i", "<A-Right>", "<C-o>w", { desc = "Jump word forward" })
 -- 2. Shift + Arrows Selection (VS Code Style)
 -------------------------------------------------------------------------------
 -- Shift + Left/Right character selection in Normal Mode
-vim.keymap.set("n", "<S-Left>", "vC-h>", { desc = "Select left" })
+vim.keymap.set("n", "<S-Left>", "vh", { desc = "Select left" })
 vim.keymap.set("n", "<S-Right>", "v", { desc = "Select right" })
 
 -- Shift + Up/Down line selection in Normal Mode
