@@ -29,20 +29,7 @@ end, { desc = "Reset Zoom" })
 -------------------------------------------------------------------------------
 -- Neovide GUI Settings
 -------------------------------------------------------------------------------
-if vim.g.neovide then
-  -- Back to JetBrains Mono with Nerd Font support
-  vim.o.guifont = "JetBrainsMono Nerd Font:h18"
-
-  -- Remove vertical gaps between block characters
-  vim.g.neovide_linespace = 0
-
-  -- macOS shortcuts & input settings
-  vim.g.neovide_input_ime = false
-  vim.g.neovide_input_use_logo = true
-end
-
 -- Font-Cycle setup
-
 
 if vim.g.neovide then
     -- Back to JetBrains Mono with Nerd Font support

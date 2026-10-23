@@ -20,7 +20,6 @@ opt.inccommand = "split"
 opt.showmode = true
 opt.smartcase = true
 opt.ignorecase = true
-opt.smartcase = true
 opt.termguicolors = true
 opt.signcolumn = "yes"
 opt.colorcolumn = "0"
@@ -42,7 +41,6 @@ opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 opt.undofile = true
 
 vim.opt.completeopt = "menuone,noselect,fuzzy,nosort"
-vim.opt.clipboard = vim.opt.clipboard + "unnamedplus"
 opt.isfname:append("@-@")
 opt.guicursor = ""
 opt.cmdheight = 0
