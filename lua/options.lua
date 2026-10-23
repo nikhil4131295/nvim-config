@@ -62,9 +62,3 @@ vim.opt.sidescrolloff = 0
 vim.keymap.set({ "n", "v", "i" }, "<ScrollWheelRight>", "<Nop>", { silent = true })
 vim.keymap.set({ "n", "v", "i" }, "<ScrollWheelLeft>", "<Nop>", { silent = true })
 
--------------------------------------------------------------------------------
--- Neovide Configuration
--------------------------------------------------------------------------------
-if vim.g.neovide then
-  vim.g.neovide_input_ime = false
-end

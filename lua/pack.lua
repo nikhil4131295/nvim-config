@@ -17,7 +17,7 @@ vim.pack.add({
     "https://github.com/tanvirtin/monokai.nvim", -- Monokai Pro / Classic
     --"https://github.com/stevearc/oil.nvim",
     "https://github.com/nvim-tree/nvim-tree.lua",
-    "https://github.com/echasnovski/mini.nvim",
+    "https://github.com/nvim-mini/mini.nvim",
     "https://github.com/windwp/nvim-autopairs",
    -- "https://github.com/numToStr/Comment.nvim",
     "https://github.com/akinsho/bufferline.nvim",
