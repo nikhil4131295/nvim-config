@@ -85,6 +85,8 @@ local favorite_themes = {
   "tokyonight-night",
   "tokyonight-storm",
   "monokai",
+  "pinkish_day",
+  "gruber-darker"
 }
 local current_theme_index = 1
 
