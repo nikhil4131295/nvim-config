@@ -48,6 +48,9 @@ if vim.g.neovide then
        vim.g.neovide_scroll_animation_length = 0.25
        -- Hide the mouse pointer while typing
        vim.g.neovide_hide_mouse_when_typing = true
+              -- Subtle see-through window with blur behind it (1.0 = fully solid)
+       vim.g.neovide_opacity = 0.95
+       vim.g.neovide_window_blurred = true
 end
 
 local fonts = {
