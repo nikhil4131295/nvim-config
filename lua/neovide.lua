@@ -39,6 +39,15 @@ if vim.g.neovide then
     -- macOS shortcuts & input settings
     vim.g.neovide_input_ime = false
     vim.g.neovide_input_use_logo = true
+           -- Breathing room around the text
+       vim.g.neovide_padding_top = 10
+       vim.g.neovide_padding_bottom = 10
+       vim.g.neovide_padding_left = 12
+       vim.g.neovide_padding_right = 12
+       -- Slightly snappier smooth scrolling (default is 0.3)
+       vim.g.neovide_scroll_animation_length = 0.25
+       -- Hide the mouse pointer while typing
+       vim.g.neovide_hide_mouse_when_typing = true
 end
 
 local fonts = {
