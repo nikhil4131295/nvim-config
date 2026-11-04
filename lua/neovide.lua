@@ -51,6 +51,8 @@ if vim.g.neovide then
               -- Subtle see-through window with blur behind it (1.0 = fully solid)
        vim.g.neovide_opacity = 0.95
        vim.g.neovide_window_blurred = true
+              -- Fade the cursor in and out instead of blinking abruptly
+       vim.g.neovide_cursor_smooth_blink = true
 end
 
 local fonts = {
