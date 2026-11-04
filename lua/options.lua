@@ -17,14 +17,15 @@ opt.smartindent = true
 opt.inccommand = "split"
 
 -- Search & Appearance
-opt.showmode = true
+opt.showmode = false
 opt.smartcase = true
 opt.ignorecase = true
 opt.termguicolors = true
 opt.signcolumn = "yes"
-opt.colorcolumn = "0"
 opt.cursorline = true
 opt.scrolloff = 8
+opt.fillchars = { eob = " " } -- hide the ~ on empty lines
+vim.o.winborder = "rounded"   -- rounded borders on all floating windows
 
 -- Split Directions
 opt.splitbelow = true
