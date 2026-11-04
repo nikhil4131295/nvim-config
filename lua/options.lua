@@ -52,6 +52,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
+-- Modern UI & Window Polish
+vim.o.winborder = "rounded"
+vim.opt.fillchars = { eob = " " }
+vim.opt.inccommand = "split"
+
 
 -- Enable line wrapping so long code lines wrap instead of shifting the screen
 vim.opt.wrap = true

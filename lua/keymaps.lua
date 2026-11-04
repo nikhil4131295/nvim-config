@@ -68,9 +68,10 @@ vim.keymap.set("n", "<leader>r", function()
   end
 
   -- Open split, run process, focus terminal, and store buffer handle
-  vim.cmd("botright vsplit | terminal " .. cmd)
-  vim.cmd("vertical resize 50")
-  vim.cmd("startinsert")
+       local height = math.max(10, math.floor(vim.o.lines * 0.35))
+     vim.cmd(string.format("botright %dsplit | terminal %s", height, cmd))
+     vim.wo.winfixheight = true
+     vim.cmd("startinsert")
   runner_term_buf = vim.api.nvim_get_current_buf()
 end, { desc = "Compile & Run C++ (/tmp) or Java" })
 
@@ -267,3 +268,31 @@ vim.keymap.set({"n", "v"}, "<D-Z>", "<C-r>", { desc = "Redo change" })
 -- Insert Mode (temporarily escapes to execute undo/redo without dropping out of insert mode)
 vim.keymap.set("i", "<D-z>", "<C-o>u", { desc = "Undo change in insert mode" })
 vim.keymap.set("i", "<D-Z>", "<C-o><C-r>", { desc = "Redo change in insert mode" })
+
+   -- Terminal panel: ignore mouse clicks while typing (prevents accidental focus loss)
+   for _, key in ipairs({ "<LeftMouse>", "<LeftDrag>", "<LeftRelease>", "<2-LeftMouse>" }) do
+     vim.keymap.set("t", key, "<Nop>", { desc = "Ignore mouse in terminal mode" })
+   end
+
+   -- Move up from the bottom panel back to your code
+   vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Move to window above from terminal" })
+
+   local term_group = vim.api.nvim_create_augroup("TerminalPanel", { clear = true })
+
+   -- Clean look and handy keys for every terminal buffer
+   vim.api.nvim_create_autocmd("TermOpen", {
+     group = term_group,
+     callback = function(args)
+       vim.wo.number = false
+       vim.wo.relativenumber = false
+       vim.wo.signcolumn = "no"
+       vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = args.buf, desc = "Close terminal" })
+     end,
+   })
+
+   -- Entering a terminal window puts you straight into typing mode
+   vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+     group = term_group,
+     pattern = "term://*",
+     command = "startinsert",
+   })
