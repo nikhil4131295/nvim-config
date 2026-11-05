@@ -49,8 +49,13 @@ if vim.g.neovide then
        -- Hide the mouse pointer while typing
        vim.g.neovide_hide_mouse_when_typing = true
               -- Subtle see-through window with blur behind it (1.0 = fully solid)
-       vim.g.neovide_opacity = 0.95
+       vim.g.neovide_opacity = 0.50
        vim.g.neovide_window_blurred = true
+              -- Fullscreen that keeps transparency and blur (hides Dock and menu bar)
+       vim.g.neovide_macos_simple_fullscreen = false
+       vim.keymap.set("n", "<leader>tf", function()
+           vim.g.neovide_macos_simple_fullscreen = not vim.g.neovide_macos_simple_fullscreen
+       end, { desc = "Toggle simple fullscreen (keeps blur)" })
               -- Thin line cursor normally; thick block only while moving (keeps the smear chunky)
        local cursor_thin  = "n-v-c-sm:ver20,i-ci-ve:ver25,r-cr-o:hor20"
        local cursor_thick = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
