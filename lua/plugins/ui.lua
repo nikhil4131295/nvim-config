@@ -22,6 +22,14 @@ require("bufferline").setup({
     mode = "buffers",
     diagnostics = "nvim_lsp",
     always_show_bufferline = true,
+           separator_style = "thin",
+       show_buffer_close_icons = false,
+       show_close_icon = false,
+       modified_icon = "●",
+       diagnostics_indicator = function(count, level)
+         local icon = level:match("error") and "\u{f057} " or "\u{f071} "
+         return " " .. icon .. count
+       end,
     offsets = {
       {
         filetype = "NvimTree",
