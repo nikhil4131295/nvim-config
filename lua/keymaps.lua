@@ -89,14 +89,21 @@ local favorite_themes = {
   "pinkish_day",
   "gruber-darker"
 }
-local current_theme_index = 1
-
-vim.keymap.set("n", "<leader>th", function()
-  current_theme_index = (current_theme_index % #favorite_themes) + 1
-  local theme = favorite_themes[current_theme_index]
-  vim.cmd.colorscheme(theme)
-  vim.notify("Theme: " .. theme, vim.log.levels.INFO, { title = "Colorscheme Switched" })
-end, { desc = "Cycle through favorite themes instantly" })
+   vim.keymap.set("n", "<leader>th", function()
+     -- Continue from whichever theme is active right now
+     local idx = 0
+     for i, t in ipairs(favorite_themes) do
+       if t == vim.g.colors_name then
+         idx = i
+         break
+       end
+     end
+     local theme = favorite_themes[(idx % #favorite_themes) + 1]
+     vim.cmd.colorscheme(theme)
+     -- Remember the choice for next startup
+     pcall(vim.fn.writefile, { theme }, vim.fn.stdpath("state") .. "/last_theme")
+     vim.notify("Theme: " .. theme, vim.log.levels.INFO, { title = "Colorscheme Switched" })
+   end, { desc = "Cycle through favorite themes instantly" })
 
 -- Move single lines up/down with Alt/Option + j/k or Up/Down
 vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==", { desc = "Move line down" })

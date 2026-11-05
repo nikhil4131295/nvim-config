@@ -18,7 +18,6 @@ vim.pack.add({
     "https://github.com/blazkowolf/gruber-darker.nvim", --Gruber Darker
     "https://github.com/rktjmp/lush.nvim",
     "https://github.com/mustardfrog/pinkish_day", -- Pink theme
-    "https://github.com/mustardfrog/pinkish_day", --Pink theme
     --"https://github.com/stevearc/oil.nvim",
     "https://github.com/nvim-tree/nvim-tree.lua",
     "https://github.com/nvim-mini/mini.nvim",

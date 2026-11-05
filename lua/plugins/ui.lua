@@ -4,7 +4,13 @@ require("catppuccin").setup({
   transparent_background = false,
   term_colors = true,
 })
-vim.cmd.colorscheme("gruber-darker")
+   -- Load the last theme chosen with <leader>th (falls back to gruber-darker)
+   local theme_file = vim.fn.stdpath("state") .. "/last_theme"
+   local ok, saved = pcall(vim.fn.readfile, theme_file)
+   local startup_theme = (ok and saved[1] and saved[1] ~= "") and saved[1] or "gruber-darker"
+   if not pcall(vim.cmd.colorscheme, startup_theme) then
+     vim.cmd.colorscheme("gruber-darker")
+   end
 
 -- 2. Setup Lualine using Catppuccin's explicit theme name
 require("lualine").setup({
