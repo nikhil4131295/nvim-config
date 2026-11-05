@@ -120,3 +120,19 @@ MiniDiff.setup({
 vim.keymap.set("n", "<leader>gg", "<cmd>tabnew | Git | only<cr>", { desc = "Fugitive Full Page New Tab" })
 vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit<CR>", { desc = "Git diff split", })
 
+
+   --- mini indent guide + cursor word highlight ---
+   require("mini.indentscope").setup({
+       symbol = "│",
+       options = { try_as_border = true },
+   })
+   require("mini.cursorword").setup({ delay = 150 })
+
+   -- Turn both off in non-code windows (dashboard, tree, help, terminal, etc.)
+   vim.api.nvim_create_autocmd("FileType", {
+       pattern = { "alpha", "NvimTree", "help", "mason", "fugitive", "qf", "minipick", "terminal" },
+       callback = function()
+           vim.b.miniindentscope_disable = true
+           vim.b.minicursorword_disable = true
+       end,
+   })
