@@ -43,7 +43,7 @@ opt.undofile = true
 
 vim.opt.completeopt = "menuone,noselect,fuzzy,nosort"
 opt.isfname:append("@-@")
-opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250"
+
 opt.cmdheight = 0
 
 vim.api.nvim_create_autocmd("TextYankPost", {
