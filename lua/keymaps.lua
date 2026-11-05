@@ -33,47 +33,77 @@ vim.keymap.set("n", "<leader>u", function()
     require("undotree").open()
 end, { desc = "Toggle Builtin Undotree" })
 
--- Multi-Language Smart Code Runner (C++ via /tmp & Java)
-local runner_term_buf = nil
+--    -- Multi-Language Smart Code Runner (C++ via /tmp & Java)
+   local runner_term_buf = nil
 
-vim.keymap.set("n", "<leader>r", function()
-  -- Save file first if it's modified and has a valid filename
-  if vim.bo.modified and vim.api.nvim_buf_get_name(0) ~= "" then
-    vim.cmd("w")
-  end
-
-  local ft = vim.bo.filetype
-  local file = vim.fn.expand("%")
-  local name = vim.fn.expand("%:t:r") -- Filename only
-  local tmp_bin = "/tmp/" .. name
-
-  -- Only close the previous code runner terminal split (not all terminals)
-  if runner_term_buf and vim.api.nvim_buf_is_valid(runner_term_buf) then
-    vim.api.nvim_buf_delete(runner_term_buf, { force = true })
-  end
-
-  local cmd = ""
-  if ft == "cpp" then
-    cmd = string.format("g++ -std=c++17 %s -o %s && %s && rm %s",
-      vim.fn.shellescape(file),
-      vim.fn.shellescape(tmp_bin),
-      vim.fn.shellescape(tmp_bin),
-      vim.fn.shellescape(tmp_bin)
-    )
-  elseif ft == "java" then
-    cmd = "java " .. vim.fn.shellescape(file)
-  else
-    vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
-    return
-  end
-
-  -- Open split, run process, focus terminal, and store buffer handle
-       local height = math.max(10, math.floor(vim.o.lines * 0.35))
+   local function open_run_panel(cmd)
+     -- Close only the previous runner terminal (not other terminals)
+     if runner_term_buf and vim.api.nvim_buf_is_valid(runner_term_buf) then
+       vim.api.nvim_buf_delete(runner_term_buf, { force = true })
+     end
+     local height = math.max(10, math.floor(vim.o.lines * 0.35))
      vim.cmd(string.format("botright %dsplit | terminal %s", height, cmd))
      vim.wo.winfixheight = true
      vim.cmd("startinsert")
-  runner_term_buf = vim.api.nvim_get_current_buf()
-end, { desc = "Compile & Run C++ (/tmp) or Java" })
+     runner_term_buf = vim.api.nvim_get_current_buf()
+   end
+
+   -- How Neovim reads g++ error lines (file:line:col: error: message)
+   local gcc_efm = table.concat({
+     "%f:%l:%c: fatal error: %m",
+     "%f:%l:%c: %trror: %m",
+     "%f:%l:%c: %tarning: %m",
+     "%f:%l:%c: note: %m",
+   }, ",")
+
+   vim.keymap.set("n", "<leader>r", function()
+     -- Save file first if it's modified and has a valid filename
+     if vim.bo.modified and vim.api.nvim_buf_get_name(0) ~= "" then
+       vim.cmd("w")
+     end
+
+     local ft = vim.bo.filetype
+     local file = vim.fn.expand("%:p")
+     local name = vim.fn.expand("%:t:r")
+     local tmp_bin = "/tmp/" .. name
+
+     if ft == "cpp" then
+       vim.cmd("cclose")
+       local ok, err = pcall(vim.system, {
+         "g++", "-std=c++17", "-fdiagnostics-color=never", file, "-o", tmp_bin,
+       }, { text = true }, function(res)
+         vim.schedule(function()
+           if res.code == 0 then
+             open_run_panel(string.format("%s && rm %s",
+               vim.fn.shellescape(tmp_bin), vim.fn.shellescape(tmp_bin)))
+           else
+             vim.fn.setqflist({}, " ", {
+               title = "g++ errors",
+               lines = vim.split(res.stderr or "", "\n"),
+               efm = gcc_efm,
+             })
+             vim.cmd("botright copen 10")
+             pcall(vim.cmd, "cfirst")
+           end
+         end)
+       end)
+       if not ok then
+         vim.notify("Could not start g++: " .. tostring(err), vim.log.levels.ERROR)
+       end
+     elseif ft == "java" then
+       open_run_panel("java " .. vim.fn.shellescape(file))
+     else
+       vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
+     end
+   end, { desc = "Compile & Run C++ (errors to quickfix) or Java" })
+
+   -- Press q to close the quickfix error list
+   vim.api.nvim_create_autocmd("FileType", {
+     pattern = "qf",
+     callback = function(args)
+       vim.keymap.set("n", "q", "<cmd>cclose<CR>", { buffer = args.buf, desc = "Close error list" })
+     end,
+   })
 
 -- Clear search highlights with <Esc>
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { silent = true, desc = "Clear search highlights" })
