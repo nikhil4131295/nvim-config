@@ -198,7 +198,6 @@ vim.keymap.set("v", "<S-A-Right>", "w", { desc = "Expand word selection right" }
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- Easy window navigation directly from terminal mode
-vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Move to left window from terminal" })
 vim.keymap.set("t", "<C-q>", "<C-\\><C-n><cmd>close<CR>", { desc = "Close terminal split" })
 
 -------------------------------------------------------------------------------
@@ -312,7 +311,6 @@ vim.keymap.set("i", "<D-Z>", "<C-o><C-r>", { desc = "Redo change in insert mode"
    end
 
    -- Move up from the bottom panel back to your code
-   vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Move to window above from terminal" })
 
    local term_group = vim.api.nvim_create_augroup("TerminalPanel", { clear = true })
 
@@ -333,3 +331,10 @@ vim.keymap.set("i", "<D-Z>", "<C-o><C-r>", { desc = "Redo change in insert mode"
      pattern = "term://*",
      command = "startinsert",
    })
+
+   
+   -- Window navigation with Ctrl + h/j/k/l (code, tree, error list, terminal panel)
+   for _, dir in ipairs({ "h", "j", "k", "l" }) do
+     vim.keymap.set("n", "<C-" .. dir .. ">", "<C-w>" .. dir, { desc = "Move to window " .. dir })
+     vim.keymap.set("t", "<C-" .. dir .. ">", "<C-\\><C-n><C-w>" .. dir, { desc = "Move to window " .. dir })
+   end
