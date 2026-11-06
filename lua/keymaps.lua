@@ -337,3 +337,42 @@ vim.keymap.set("i", "<D-Z>", "<C-o><C-r>", { desc = "Redo change in insert mode"
      vim.keymap.set("n", "<C-" .. dir .. ">", "<C-w>" .. dir, { desc = "Move to window " .. dir })
      vim.keymap.set("t", "<C-" .. dir .. ">", "<C-\\><C-n><C-w>" .. dir, { desc = "Move to window " .. dir })
    end
+
+   
+   -- Browser-style tabs: Cmd+W closes, Cmd+Shift+T reopens the last closed file
+   local closed_files = {}
+
+   vim.api.nvim_create_autocmd("BufDelete", {
+     callback = function(args)
+       local name = vim.api.nvim_buf_get_name(args.buf)
+       if name ~= "" and vim.fn.filereadable(name) == 1 then
+         table.insert(closed_files, name)
+         if #closed_files > 30 then table.remove(closed_files, 1) end
+       end
+     end,
+   })
+
+   local function close_tab()
+     local listed = vim.fn.getbufinfo({ buflisted = 1 })
+     if #listed > 1 then
+       local cur = vim.api.nvim_get_current_buf()
+       vim.cmd("bprevious")
+       vim.cmd("confirm bdelete " .. cur)
+     else
+       vim.cmd("confirm quit")
+     end
+   end
+
+   local function reopen_tab()
+     while #closed_files > 0 do
+       local name = table.remove(closed_files)
+       if vim.fn.filereadable(name) == 1 then
+         vim.cmd("edit " .. vim.fn.fnameescape(name))
+         return
+       end
+     end
+     vim.notify("No recently closed tabs", vim.log.levels.INFO)
+   end
+
+   vim.keymap.set({ "n", "i", "v" }, "<D-w>", close_tab, { desc = "Close tab (Cmd+W)" })
+   vim.keymap.set({ "n", "i", "v" }, "<D-T>", reopen_tab, { desc = "Reopen closed tab (Cmd+Shift+T)" })
