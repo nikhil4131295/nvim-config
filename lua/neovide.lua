@@ -49,7 +49,7 @@ if vim.g.neovide then
        -- Hide the mouse pointer while typing
        vim.g.neovide_hide_mouse_when_typing = true
               -- Subtle see-through window with blur behind it (1.0 = fully solid)
-       vim.g.neovide_opacity = 0.50
+       vim.g.neovide_opacity = 0.65
        vim.g.neovide_window_blurred = true
               -- Fullscreen that keeps transparency and blur (hides Dock and menu bar)
        vim.g.neovide_macos_simple_fullscreen = false

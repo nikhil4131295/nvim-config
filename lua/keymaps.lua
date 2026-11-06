@@ -116,7 +116,6 @@ local favorite_themes = {
   "tokyonight-night",
   "tokyonight-storm",
   "monokai",
-  "pinkish_day",
   "gruber-darker"
 }
    vim.keymap.set("n", "<leader>th", function()

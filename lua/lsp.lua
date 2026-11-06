@@ -48,3 +48,30 @@ vim.lsp.enable({
     "rust_analyzer",
 })
 
+
+   -- Show "Expected ..." errors on the line where the token is missing
+   -- (end of the previous non-blank line) instead of the next line.
+   local original_diag_set = vim.diagnostic.set
+   vim.diagnostic.set = function(namespace, bufnr, diagnostics, opts)
+     if diagnostics then
+       for _, d in ipairs(diagnostics) do
+         if d.message and d.message:match("^Expected") and d.lnum and d.lnum > 0 then
+           pcall(function()
+             local prev = d.lnum - 1
+             while prev >= 0 do
+               local line = vim.api.nvim_buf_get_lines(bufnr, prev, prev + 1, false)[1] or ""
+               if line:match("%S") then break end
+               prev = prev - 1
+             end
+             if prev >= 0 then
+               local text = vim.api.nvim_buf_get_lines(bufnr, prev, prev + 1, false)[1] or ""
+               local len = #text:gsub("%s+$", "")
+               d.lnum, d.end_lnum = prev, prev
+               d.col, d.end_col = len, len
+             end
+           end)
+         end
+       end
+     end
+     return original_diag_set(namespace, bufnr, diagnostics, opts)
+   end
