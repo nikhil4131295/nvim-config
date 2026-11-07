@@ -56,6 +56,28 @@ end, { desc = "Toggle Builtin Undotree" })
      "%f:%l:%c: note: %m",
    }, ",")
 
+      -- Language runners: add a line here to support another filetype
+   local runners = {
+     cpp = {
+       compile = function(file, bin) return { "g++", "-std=c++17", "-fdiagnostics-color=never", file, "-o", bin } end,
+       efm = gcc_efm,
+     },
+     c = {
+       compile = function(file, bin) return { "gcc", "-std=c17", "-fdiagnostics-color=never", file, "-o", bin } end,
+       efm = gcc_efm,
+     },
+     rust = {
+       compile = function(file, bin) return { "rustc", file, "-o", bin } end,
+     },
+     java = { run = function(file) return "java " .. vim.fn.shellescape(file) end },
+     python = { run = function(file) return "python3 " .. vim.fn.shellescape(file) end },
+     javascript = { run = function(file) return "node " .. vim.fn.shellescape(file) end },
+     typescript = { run = function(file) return "npx tsx " .. vim.fn.shellescape(file) end },
+     go = { run = function(file) return "go run " .. vim.fn.shellescape(file) end },
+     lua = { run = function(file) return "lua " .. vim.fn.shellescape(file) end },
+     sh = { run = function(file) return "bash " .. vim.fn.shellescape(file) end },
+   }
+
    vim.keymap.set("n", "<leader>r", function()
      -- Save file first if it's modified and has a valid filename
      if vim.bo.modified and vim.api.nvim_buf_get_name(0) ~= "" then
@@ -63,39 +85,45 @@ end, { desc = "Toggle Builtin Undotree" })
      end
 
      local ft = vim.bo.filetype
+     local r = runners[ft]
+     if not r then
+       vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
+       return
+     end
+
      local file = vim.fn.expand("%:p")
+
+     -- Interpreted languages: run straight into the bottom panel
+     if r.run then
+       open_run_panel(r.run(file))
+       return
+     end
+
+     -- Compiled languages: compile to /tmp, then run or show errors
      local name = vim.fn.expand("%:t:r")
      local tmp_bin = "/tmp/" .. name
-
-     if ft == "cpp" then
-       vim.cmd("cclose")
-       local ok, err = pcall(vim.system, {
-         "g++", "-std=c++17", "-fdiagnostics-color=never", file, "-o", tmp_bin,
-       }, { text = true }, function(res)
-         vim.schedule(function()
-           if res.code == 0 then
-             open_run_panel(string.format("%s && rm %s",
-               vim.fn.shellescape(tmp_bin), vim.fn.shellescape(tmp_bin)))
-           else
-             vim.fn.setqflist({}, " ", {
-               title = "g++ errors",
-               lines = vim.split(res.stderr or "", "\n"),
-               efm = gcc_efm,
-             })
-             vim.cmd("botright copen 10")
-             pcall(vim.cmd, "cfirst")
-           end
-         end)
+     vim.cmd("cclose")
+     local ok, err = pcall(vim.system, r.compile(file, tmp_bin), { text = true }, function(res)
+       vim.schedule(function()
+         if res.code == 0 then
+           open_run_panel(string.format("%s && rm %s",
+             vim.fn.shellescape(tmp_bin), vim.fn.shellescape(tmp_bin)))
+         else
+           local qf = {
+             title = "Compile errors",
+             lines = vim.split(res.stderr or "", "\n"),
+           }
+           if r.efm then qf.efm = r.efm end
+           vim.fn.setqflist({}, " ", qf)
+           vim.cmd("botright copen 10")
+           pcall(vim.cmd, "cfirst")
+         end
        end)
-       if not ok then
-         vim.notify("Could not start g++: " .. tostring(err), vim.log.levels.ERROR)
-       end
-     elseif ft == "java" then
-       open_run_panel("java " .. vim.fn.shellescape(file))
-     else
-       vim.notify("No runner configured for filetype: " .. ft, vim.log.levels.WARN)
+     end)
+     if not ok then
+       vim.notify("Could not start compiler: " .. tostring(err), vim.log.levels.ERROR)
      end
-   end, { desc = "Compile & Run C++ (errors to quickfix) or Java" })
+   end, { desc = "Compile & Run any supported language" })
 
    -- Press q to close the quickfix error list
    vim.api.nvim_create_autocmd("FileType", {
