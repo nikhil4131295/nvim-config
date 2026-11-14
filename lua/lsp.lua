@@ -35,6 +35,7 @@ vim.lsp.config("clangd", {
     "clangd",
     "--background-index",
     "--clang-tidy",
+    "--query-driver=/opt/homebrew/bin/g++-16",
     "--completion-style=detailed",
     "--header-insertion=iwyu",
   },
