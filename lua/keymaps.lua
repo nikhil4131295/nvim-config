@@ -59,7 +59,7 @@ end, { desc = "Toggle Builtin Undotree" })
       -- Language runners: add a line here to support another filetype
    local runners = {
      cpp = {
-       compile = function(file, bin) return { "g++", "-std=c++17", "-fdiagnostics-color=never", file, "-o", bin } end,
+        compile = function(file, bin) return { "g++-16", "-std=c++23", "-fdiagnostics-color=never", file, "-o", bin } end,
        efm = gcc_efm,
      },
      c = {
