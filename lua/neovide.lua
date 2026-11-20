@@ -56,22 +56,6 @@ if vim.g.neovide then
        vim.keymap.set("n", "<leader>tf", function()
            vim.g.neovide_macos_simple_fullscreen = not vim.g.neovide_macos_simple_fullscreen
        end, { desc = "Toggle simple fullscreen (keeps blur)" })
-              -- Thin line cursor normally; thick block only while moving (keeps the smear chunky)
-       local cursor_thin  = "n-v-c-sm:ver20,i-ci-ve:ver25,r-cr-o:hor20"
-       local cursor_thick = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
-       local cursor_timer = vim.uv.new_timer()
-       vim.o.guicursor = cursor_thin
-       vim.api.nvim_create_autocmd("CursorMoved", {
-           callback = function()
-               if vim.o.guicursor ~= cursor_thick then
-                   vim.o.guicursor = cursor_thick
-               end
-               cursor_timer:stop()
-               cursor_timer:start(300, 0, vim.schedule_wrap(function()
-                   vim.o.guicursor = cursor_thin
-               end))
-           end,
-       })
 end
 
 local fonts = {

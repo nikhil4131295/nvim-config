@@ -23,6 +23,7 @@ opt.ignorecase = true
 opt.termguicolors = true
 opt.signcolumn = "yes"
 opt.cursorline = true
+opt.guicursor = ""
 opt.scrolloff = 8
 opt.fillchars = { eob = " " } -- hide the ~ on empty lines
 vim.o.winborder = "rounded"   -- rounded borders on all floating windows
