@@ -25,7 +25,7 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
     { desc = "Replace word cursor is on globally" })
 vim.keymap.set("n", "<leader>X", "<cmd>!chmod +x %<CR>", { silent = true, desc = "makes file executable" })
 
-vim.keymap.set("n", "<leader>re", "<cmd>restart<cr>", { desc = "Restart config :restart)" })
+vim.keymap.set("n", "<leader>R", "<cmd>restart<CR>", { desc = "Restart Neovim" })
 
 -- native undotree
 vim.keymap.set("n", "<leader>u", function()
@@ -78,7 +78,7 @@ end, { desc = "Toggle Builtin Undotree" })
      sh = { run = function(file) return "bash " .. vim.fn.shellescape(file) end },
    }
 
-   vim.keymap.set("n", "<leader>r", function()
+   vim.keymap.set({ "n", "i" }, "<D-r>", function()
      -- Save file first if it's modified and has a valid filename
      if vim.bo.modified and vim.api.nvim_buf_get_name(0) ~= "" then
        vim.cmd("w")
