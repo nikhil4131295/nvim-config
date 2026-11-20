@@ -114,3 +114,9 @@ vim.keymap.set("n", "<space>fc", cycle_font, { desc = "Cycle Neovide fonts" })
        { desc = "More transparent background (Cmd+[)" })
      vim.keymap.set("n", "<leader>b0", function() set_opacity(0.95) end, { desc = "Reset background opacity" })
    end
+
+   
+-- Smooth horizontal cursor glide within a line (smear settings unchanged)
+if vim.g.neovide then
+  vim.g.neovide_cursor_short_animation_length = 0.06
+end
